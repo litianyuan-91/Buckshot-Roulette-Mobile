@@ -46,6 +46,8 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools'
 
       - name: Install Godot (headless) and templates
         run: |
@@ -67,14 +69,13 @@ jobs:
         run: |
           set -euxo pipefail
           mkdir -p "${EXPORT_DIR_ANDROID}"
-          tools/godot/Godot --headless --path . --export-release "${EXPORT_PRESET_ANDROID}" "${APK_NAME}"
+          tools/godot/Godot --headless --path . --export-debug "${EXPORT_PRESET_ANDROID}" "${APK_NAME}"
 
       - name: Export Web (WASM)
         run: |
           set -euxo pipefail
           mkdir -p "${EXPORT_DIR_WEB}"
-          # 导出为 index.html（同目录会生成 index.js / index.wasm / index.pck 等）
-          tools/godot/Godot --headless --path . --export-release "${EXPORT_PRESET_WEB}" "${EXPORT_DIR_WEB}/index.html"
+          tools/godot/Godot --headless --path . --export-debug "${EXPORT_PRESET_WEB}" "${EXPORT_DIR_WEB}/index.html"
           ls -la "${EXPORT_DIR_WEB}"
 
       - name: Zip Web build
